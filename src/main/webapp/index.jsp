@@ -4,7 +4,7 @@
     <title>Hello! Please get the Number </title>
 </head>
 <body>
-<h1>Введите номер региона</h1>
+<h1>Enter an area code</h1>
 <form action="search" method="GET">
     <table border="0">
         <tr>

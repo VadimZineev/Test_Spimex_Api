@@ -1,6 +1,7 @@
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -12,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 
 public class Service {
 
+    private static final String API_URL = "https://api.spimex.com/otc/lookup-tables/";
+
     /**
      * Метод отправляет GET запрос на url + id региона, обрабатывает полученный json файл,
      * подсчитывает кол-во активных записей и возвращает их количество
@@ -19,10 +22,10 @@ public class Service {
      * @param code - Код региона
      * @return - Количество активных записей
      */
-    public static int getActiveRecords(int code) throws IOException {
+    public static int getCountActiveRecords(int code) throws IOException {
         int count = 0;
 
-        URL url = new URL("https://api.spimex.com/otc/lookup-tables/" + code);
+        URL url = new URL(API_URL + code);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-type", "application/json");
@@ -39,7 +42,7 @@ public class Service {
                     ++count;
                 }
             }
-        } catch (final Exception ex) {
+        } catch (JSONException ex) {
             ex.printStackTrace();
         }
         return count;
