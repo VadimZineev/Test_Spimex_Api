@@ -1,7 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Hello! Please get the Number </title>
+    <title>TEST SPIMEX API</title>
 </head>
 <body>
 <h1>Enter an area code</h1>
