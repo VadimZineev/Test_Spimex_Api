@@ -24,7 +24,11 @@ public class MainServlet extends HttpServlet {
     private void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         try {
-            int areaCode = Integer.parseInt(request.getParameter("code"));
+            String areaCode = request.getParameter("code");
+            if (areaCode.length() < 2) {
+                areaCode += 0;
+            }
+            System.out.println(areaCode);
             int countActiveRecords = Service.getCountActiveRecords(areaCode);
             if (countActiveRecords != 0) {
                 out.println("<h1>Number of active records:</h1>");

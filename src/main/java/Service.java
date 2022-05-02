@@ -13,19 +13,19 @@ import java.nio.charset.StandardCharsets;
 
 public class Service {
 
-    private static final String API_URL = "https://api.spimex.com/otc/lookup-tables/";
+    private static final String API_URL = "https://api.spimex.com/otc/lookup-tables/1";
 
     /**
-     * Метод отправляет GET запрос на url + id региона, обрабатывает полученный json файл,
+     * Метод отправляет GET запрос, обрабатывает полученный json файл,
      * подсчитывает кол-во активных записей и возвращает их количество
      *
-     * @param code - Код региона
+     * @param areaCode - Код региона
      * @return - Количество активных записей
      */
-    public static int getCountActiveRecords(int code) throws IOException {
+    public static int getCountActiveRecords(String areaCode) throws IOException {
         int count = 0;
 
-        URL url = new URL(API_URL + code);
+        URL url = new URL(API_URL);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-type", "application/json");
@@ -37,9 +37,15 @@ public class Service {
             JSONObject json = new JSONObject(fullJsonText);
             JSONArray jsonArray = json.getJSONArray("records");
 
+            String inn = null;
             for (int i = 0; i < jsonArray.length(); i++) {
-                if (jsonArray.getJSONObject(i).isNull("BlockDate") || jsonArray.getJSONObject(i).get("BlockDate") == "") {
-                    ++count;
+                inn = (String) jsonArray.getJSONObject(i).get("INN");
+                if (!inn.isEmpty()) {
+                    if (inn.substring(0, 2).equals(areaCode)) {
+                        if (jsonArray.getJSONObject(i).get("BlockDate") == "") {
+                            ++count;
+                        }
+                    }
                 }
             }
         } catch (JSONException ex) {
